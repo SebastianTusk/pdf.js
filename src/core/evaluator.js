@@ -1235,6 +1235,7 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
       resources,
       operatorList,
       initialState = null,
+      rawOperators = false,
     }) {
       // Ensure that `resources`/`initialState` is correctly initialized,
       // even if the provided parameter is e.g. `null`.
@@ -1291,7 +1292,7 @@ var PartialEvaluator = (function PartialEvaluatorClosure() {
           var args = operation.args;
           var fn = operation.fn;
 
-          switch (fn | 0) {
+          switch ((!rawOperators ? fn : 0) | 0) {
             case OPS.paintXObject:
               // eagerly compile XForm objects
               var name = args[0].name;

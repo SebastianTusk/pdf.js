@@ -817,6 +817,13 @@ class PDFDocumentProxy {
  */
 
 /**
+ * Page getOperatorList parameters.
+ *
+ * @typedef {Object} getOperatorListParameters
+ * @property {boolean} rawOperators - return the raw operator list (do not interpret color spaces, )
+ */
+
+/**
  * Page getTextContent parameters.
  *
  * @typedef {Object} getTextContentParameters
@@ -1142,10 +1149,11 @@ class PDFPageProxy {
   }
 
   /**
+   * @param {getOperatorListParameters} params - getOperatorList parameters.
    * @returns {Promise} A promise resolved with an {@link PDFOperatorList}
    *   object that represents page's operator list.
    */
-  getOperatorList() {
+  getOperatorList(params = { rawOperators: false }) {
     function operatorListChanged() {
       if (intentState.operatorList.lastChunk) {
         intentState.opListReadCapability.resolve(intentState.operatorList);
@@ -1182,6 +1190,7 @@ class PDFPageProxy {
       this._pumpOperatorList({
         pageIndex: this._pageIndex,
         intent: renderingIntent,
+        rawOperators: params.rawOperators === true,
       });
     }
     return intentState.opListReadCapability.promise;

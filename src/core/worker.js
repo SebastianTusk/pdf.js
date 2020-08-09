@@ -521,6 +521,7 @@ var WorkerMessageHandler = {
               task,
               intent: data.intent,
               renderInteractiveForms: data.renderInteractiveForms,
+              rawOperators: data.rawOperators,
             })
             .then(
               function(operatorListInfo) {

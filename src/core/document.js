@@ -240,7 +240,7 @@ class Page {
     });
   }
 
-  getOperatorList({ handler, sink, task, intent, renderInteractiveForms }) {
+  getOperatorList({ handler, sink, task, intent, renderInteractiveForms, rawOperators }) {
     const contentStreamPromise = this.pdfManager.ensure(
       this,
       "getContentStream"
@@ -281,6 +281,8 @@ class Page {
           task,
           resources: this.resources,
           operatorList: opList,
+          initialState: null,
+          rawOperators,
         })
         .then(function() {
           return opList;
