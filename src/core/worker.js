@@ -525,6 +525,25 @@ class WorkerMessageHandler {
       return pdfManager.requestLoadedStream().then(stream => stream.bytes);
     });
 
+    handler.on("GetOutputIntents", function wphSetupGetOutputIntents(data) {
+      var profiles = [];
+      var outputIntents = pdfManager.pdfDocument.catalog.catDict.getArray(
+        "OutputIntents"
+      );
+
+      if (outputIntents) {
+        outputIntents.forEach(outputIntent => {
+          if (isDict(outputIntent, "OutputIntent")) {
+            var profileInfo = outputIntent.get("Info");
+            if (typeof profileInfo === "string") {
+              profiles.push(profileInfo);
+            }
+          }
+        });
+      }
+      return { outputIntents: profiles };
+    });
+
     handler.on("GetAnnotations", function ({ pageIndex, intent }) {
       return pdfManager.getPage(pageIndex).then(function (page) {
         const task = new WorkerTask(`GetAnnotations: page ${pageIndex}`);

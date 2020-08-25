@@ -230,6 +230,12 @@ const RENDERING_CANCELLED_TIMEOUT = 100; // ms
  */
 
 /**
+ * @typedef {Object} PDFDocumentOutputIntents
+ * @property {Array<string>} outputIntents - Array of color profile names set
+ * in PDF/X-4 OutputIntends.
+ */
+
+/**
  * This is the main entry point for loading a PDF and interacting with it.
  *
  * NOTE: If a URL is used to fetch the PDF data a standard Fetch API call (or
@@ -1032,6 +1038,24 @@ class PDFDocumentProxy {
    */
   getDownloadInfo() {
     return this._transport.downloadInfoCapability.promise;
+  }
+
+  /**
+   * @returns {Promise<PDFDocumentStats>} A promise this is resolved with
+   *   current statistics about document structures (see
+   *   {@link PDFDocumentStats}).
+   */
+  getStats() {
+    return this._transport.getStats();
+  }
+
+  /**
+   * @returns {Promise<PDFDocumentOutputIntents>} A promise this is resolved
+   *   with current statistics about document structures (see
+   *   {@link PDFDocumentOutputIntents}).
+   */
+  getOutputIntents() {
+    return this._transport.getOutputIntents();
   }
 
   /**
@@ -3062,6 +3086,10 @@ class WorkerTransport {
 
   getMarkInfo() {
     return this.messageHandler.sendWithPromise("GetMarkInfo", null);
+  }
+  
+  getOutputIntents() {
+    return this.messageHandler.sendWithPromise("GetOutputIntents", null);
   }
 
   async startCleanup(keepLoadedFonts = false) {
