@@ -194,6 +194,12 @@ function setPDFNetworkStreamFactory(pdfNetworkStreamFactory) {
  */
 
 /**
+ * @typedef {Object} PDFDocumentOutputIntents
+ * @property {Array<string>} outputIntents - Array of color profile names set
+ * in PDF/X-4 OutputIntends.
+ */
+
+/**
  * This is the main entry point for loading a PDF and interacting with it.
  *
  * NOTE: If a URL is used to fetch the PDF data a standard Fetch API call (or
@@ -831,6 +837,15 @@ class PDFDocumentProxy {
    */
   getStats() {
     return this._transport.getStats();
+  }
+
+  /**
+   * @returns {Promise<PDFDocumentOutputIntents>} A promise this is resolved
+   *   with current statistics about document structures (see
+   *   {@link PDFDocumentOutputIntents}).
+   */
+  getOutputIntents() {
+    return this._transport.getOutputIntents();
   }
 
   /**
@@ -2594,6 +2609,10 @@ class WorkerTransport {
 
   getStats() {
     return this.messageHandler.sendWithPromise("GetStats", null);
+  }
+
+  getOutputIntents() {
+    return this.messageHandler.sendWithPromise("GetOutputIntents", null);
   }
 
   startCleanup() {

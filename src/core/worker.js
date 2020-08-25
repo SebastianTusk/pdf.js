@@ -30,7 +30,7 @@ import {
   VerbosityLevel,
   warn,
 } from "../shared/util.js";
-import { clearPrimitiveCaches, Ref } from "./primitives.js";
+import { clearPrimitiveCaches, isDict, Ref } from "./primitives.js";
 import { LocalPdfManager, NetworkPdfManager } from "./pdf_manager.js";
 import { isNodeJS } from "../shared/is_node.js";
 import { MessageHandler } from "../shared/message_handler.js";
@@ -505,6 +505,25 @@ class WorkerMessageHandler {
 
     handler.on("GetStats", function wphSetupGetStats(data) {
       return pdfManager.pdfDocument.xref.stats;
+    });
+
+    handler.on("GetOutputIntents", function wphSetupGetOutputIntents(data) {
+      var profiles = [];
+      var outputIntents = pdfManager.pdfDocument.catalog.catDict.getArray(
+        "OutputIntents"
+      );
+
+      if (outputIntents) {
+        outputIntents.forEach(outputIntent => {
+          if (isDict(outputIntent, "OutputIntent")) {
+            var profileInfo = outputIntent.get("Info");
+            if (typeof profileInfo === "string") {
+              profiles.push(profileInfo);
+            }
+          }
+        });
+      }
+      return { outputIntents: profiles };
     });
 
     handler.on("GetAnnotations", function ({ pageIndex, intent }) {
