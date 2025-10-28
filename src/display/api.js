@@ -1041,15 +1041,6 @@ class PDFDocumentProxy {
   }
 
   /**
-   * @returns {Promise<PDFDocumentStats>} A promise this is resolved with
-   *   current statistics about document structures (see
-   *   {@link PDFDocumentStats}).
-   */
-  getStats() {
-    return this._transport.getStats();
-  }
-
-  /**
    * @returns {Promise<PDFDocumentOutputIntents>} A promise this is resolved
    *   with current statistics about document structures (see
    *   {@link PDFDocumentOutputIntents}).
