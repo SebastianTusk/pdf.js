@@ -527,9 +527,7 @@ class WorkerMessageHandler {
 
     handler.on("GetOutputIntents", function wphSetupGetOutputIntents(data) {
       var profiles = [];
-      var outputIntents = pdfManager.pdfDocument.catalog.catDict.getArray(
-        "OutputIntents"
-      );
+      var outputIntents = pdfManager.pdfDocument.xref.getCatalogObj().getArray("OutputIntents");
 
       if (outputIntents) {
         outputIntents.forEach(outputIntent => {
